@@ -1,32 +1,43 @@
-import { createContext, useState } from "react";
-
+import { createContext, useEffect, useState } from "react";
 
 import { Md5 } from "ts-md5";
 import { IProvider } from "interfaces/iprovider.interface";
+import { Types } from "tools/types";
 
 type Props = {
   currentRoute: any;
   setCurrentRoute: (value: any) => void;
   saveCache: (data: any, key: string) => void;
   getCache: (key: string) => any;
+  toggleTheme: () => void;
+  mode: string;
 };
 
 export const ResourceContext = createContext<Props>({
-    currentRoute: false,
-    setCurrentRoute: () => {},
-    saveCache: () => {},
-    getCache: () => {},
+  currentRoute: false,
+  setCurrentRoute: () => {},
+  saveCache: () => {},
+  getCache: () => {},
+  toggleTheme: () => {},
+  mode: Types.LIGHT_MODE,
 });
+var cacheData: any = {};
 
-export const ResourceProvider: React.FC<IProvider> = ({ children }) => {
-  
+type ProviderProps = {
+  toggleTheme: () => void;
+  mode: string;
+} & IProvider;
 
+export const ResourceProvider: React.FC<ProviderProps> = ({
+  toggleTheme,
+  mode,
+  children,
+}) => {
   const [currentRoute, setCurrentRoute] = useState(false);
-  const cacheData: any = {};
 
   const getCacheIdentifier = (key: string) => {
     let k = "RO";
-    
+
     k += "_" + JSON.stringify(key);
 
     return Md5.hashStr(k);
@@ -52,6 +63,8 @@ export const ResourceProvider: React.FC<IProvider> = ({ children }) => {
     setCurrentRoute,
     saveCache,
     getCache,
+    toggleTheme,
+    mode,
   };
 
   return (

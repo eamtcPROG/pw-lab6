@@ -3,7 +3,7 @@ import { createTheme, PaletteOptions } from "@mui/material/styles";
 const lightPalette: PaletteOptions = {
   mode: "light",
   primary: {
-    main: "#003366",
+    main: "#003c8a",
     dark: "#D0D0D0",
   },
   secondary: {
@@ -14,21 +14,21 @@ const lightPalette: PaletteOptions = {
     main: "#FF3434",
   },
   background: {
-    default: "#FAFAFA",
+    default: "#FAF9F6",
     paper: "#ffffff",
   },
 
   text: {
-    primary: "#333333",
-    secondary: "#555555",
-    disabled: "#777777",
+    primary: "#36454F",
+    secondary: "#008080",
+    disabled: "#F5F5DC",
   },
 };
 
 const darkPalette: PaletteOptions = {
   mode: "dark",
   primary: {
-    main: "#D0D0D0",
+    main: "#1C1C1C",
     dark: "#D0D0D0",
   },
   secondary: {

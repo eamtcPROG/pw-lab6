@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Logo } from "./Logo";
+import { SwitchThemeMode } from "components/header/SwitchThemeMode";
 
 const pages = ["Products", "Pricing", "Blog"];
 
@@ -124,7 +125,9 @@ const Header: React.FC<PageComponentProps> = ({ currentRoute }) => {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}></Box>
+          <Box sx={{ flexGrow: 0 }}>
+            <SwitchThemeMode />
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>
