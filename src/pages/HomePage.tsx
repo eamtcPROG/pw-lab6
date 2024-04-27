@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PageComponentProps from "interfaces/pagecomponentprops.interface";
 
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Container } from "@mui/material";
 import { PostList } from "components/posts/PostList";
 import { AddPostButton } from "components/posts/AddPostButton";
 import { FormDialog } from "components/elements/dialog/FormDialog";
@@ -17,15 +17,17 @@ const HomePage: React.FC<PageComponentProps> = ({ currentRoute }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}  justifyContent="center" alignItems="center">
-        <PostList />
-      </Grid>
-      <AddPostButton handleOnClick={handleOpen} />
-      <FormDialog open={open} handleClose={handleClose} title="Add Post">
-        <FormPost handleClose={handleClose} />
-      </FormDialog>
-    </Box>
+    <Container maxWidth="md">
+      <Box sx={{ flexGrow: 1 ,mt:3}}>
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <PostList />
+        </Grid>
+        <AddPostButton handleOnClick={handleOpen} />
+        <FormDialog open={open} handleClose={handleClose} title="Add Post">
+          <FormPost handleClose={handleClose} />
+        </FormDialog>
+      </Box>
+    </Container>
   );
 };
 

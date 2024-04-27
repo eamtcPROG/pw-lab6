@@ -10,4 +10,8 @@ export class CommentDto {
         this.idpost = idpost;
         this.content = content || '';
     }
+
+    static filterByIdPost(comments: Array<CommentDto>, idpost: string): Array<CommentDto> {
+        return comments.filter((item) => item.idpost === idpost);
+    }
 }
