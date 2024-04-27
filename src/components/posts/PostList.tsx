@@ -30,7 +30,7 @@ const PostList: React.FC = () => {
     if (!Array.isArray(posts)) return null;
     if (!posts.length) return <NoResult />;
     return posts.map((item, index) => (
-      <Grid item spacing={2} key={index}>
+      <Grid item sm={12}  key={index}>
         <PostItem item={item} />
       </Grid>
     ));
