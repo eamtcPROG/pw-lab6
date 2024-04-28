@@ -9,11 +9,13 @@ type UsePost = {
   filterPosts: () => Array<PostDto>;
   setSearchText: (searchText: string) => void;
   searchText: string;
+  deletePost: (id: string) => void;
+  editPost: (post: PostDto) => void;
 };
 export const usePost = (): UsePost => {
   const {
     state: { posts, searchText },
-    actions: { addPost, getPostsLocal, setSearchText },
+    actions: { addPost, getPostsLocal, setSearchText,deletePost,editPost },
   } = useContext(Context);
 
   const filterPosts = useCallback(() => {
@@ -29,5 +31,7 @@ export const usePost = (): UsePost => {
     filterPosts,
     setSearchText,
     searchText,
+    deletePost,
+    editPost
   };
 };

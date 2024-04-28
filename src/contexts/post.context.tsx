@@ -11,6 +11,8 @@ type Actions = {
     addPost: (post: PostDto) => void;
     getPostsLocal: () => void;
     setSearchText: (searchText: string) => void;
+    deletePost: (id: string) => void;
+    editPost: (post: PostDto) => void;
 };
 
 const resourceReducer = (state: StateResource, action: any) => {
@@ -38,6 +40,30 @@ const resourceReducer = (state: StateResource, action: any) => {
         searchText: action.payload,
       };
     }
+    case "delete_post": {
+      const currentPosts = state.posts || [];
+      const newArr = currentPosts.filter((item) => item.id !== action.payload);
+      LocalStorageTools.saveObject("posts", newArr);
+      return {
+        ...state,
+        posts: newArr,
+      };
+    }
+    case "edit_post": {
+      const currentPosts = state.posts || [];
+      const newArr = currentPosts.map((item) => {
+        if (item.id === action.payload.id) {
+          return action.payload;
+        }
+        return item;
+      });
+      LocalStorageTools.saveObject("posts", newArr);
+      return {
+        ...state,
+        posts: newArr,
+      };
+    }
+
 
     default:
       return state;
@@ -56,12 +82,23 @@ const setSearchText = (dispatch: any) => (searchText: string) => {
   dispatch({ type: "set_search_text", payload: searchText });
 }
 
+const deletePost = (dispatch: any) => (id: string) => {
+  dispatch({ type: "delete_post", payload: id });
+}
+
+const editPost = (dispatch: any) => (post: PostDto) => {
+  dispatch({ type: "edit_post", payload: post });
+
+}
+
 export const { Provider, Context } = createDataContext<StateResource, Actions>(
   resourceReducer,
   {
     addPost,
     getPostsLocal,
-    setSearchText
+    setSearchText,
+    deletePost,
+    editPost
   },
   {
     posts: null,

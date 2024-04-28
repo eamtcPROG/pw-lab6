@@ -6,8 +6,10 @@ import { PostList } from "components/posts/PostList";
 import { AddPostButton } from "components/posts/AddPostButton";
 import { FormDialog } from "components/elements/dialog/FormDialog";
 import { FormPost } from "components/posts/FormPost";
+import { usePost } from "hooks/usePost";
 
 const HomePage: React.FC<PageComponentProps> = ({ currentRoute }) => {
+  const { addPost } = usePost();
   const [open, setOpen] = useState<boolean>(false);
   const handleClose = () => {
     setOpen(false);
@@ -24,7 +26,7 @@ const HomePage: React.FC<PageComponentProps> = ({ currentRoute }) => {
         </Grid>
         <AddPostButton handleOnClick={handleOpen} />
         <FormDialog open={open} handleClose={handleClose} title="Add Post">
-          <FormPost handleClose={handleClose} />
+          <FormPost handleClose={handleClose} onSubmit={addPost} />
         </FormDialog>
       </Box>
     </Container>

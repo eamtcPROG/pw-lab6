@@ -8,19 +8,23 @@ import React from "react";
 import RequiredValidator from "validators/required.validator";
 
 type Props = {
-    handleClose: () => void;
-}
-const FormPost: React.FC<Props> = ({handleClose}) => {
+  handleClose: () => void;
+  onSubmit: (obj: PostDto) => void;
+  defaultObj?: PostDto;
+  
+};
+const FormPost: React.FC<Props> = ({ handleClose, defaultObj,onSubmit }) => {
+  if (!defaultObj) defaultObj = new PostDto();
   const [obj, isDisabled, setObjField] = useForm(
-    new PostDto(),
+    defaultObj,
     RequiredValidator.getValidators(["title", "content"])
   );
-  const { addPost } = usePost();
   
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-    addPost(obj);
+    onSubmit(obj);
     handleClose();
   };
 
@@ -28,25 +32,25 @@ const FormPost: React.FC<Props> = ({handleClose}) => {
     <Box>
       <form onSubmit={handleSubmit}>
         <Box>
-        <MyTextField
-          field={"title"}
-          _label="Title"
-          setObjectField={setObjField}
-          value={obj.title}
-        />
+          <MyTextField
+            field={"title"}
+            _label="Title"
+            setObjectField={setObjField}
+            value={obj.title}
+          />
         </Box>
         <Box mt={3}>
-        <MyTextField
-          field={"content"}
-          _label="Content"
-          setObjectField={setObjField}
-          value={obj.content}
-        />
+          <MyTextField
+            field={"content"}
+            _label="Content"
+            setObjectField={setObjField}
+            value={obj.content}
+          />
         </Box>
         <Box mt={3}>
-        <MyButton disabled={isDisabled} type="submit" fullWidth>
-          Post
-        </MyButton>
+          <MyButton disabled={isDisabled} type="submit" fullWidth>
+            Post
+          </MyButton>
         </Box>
       </form>
     </Box>
