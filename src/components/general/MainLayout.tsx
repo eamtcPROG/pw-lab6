@@ -76,7 +76,7 @@ const MainLayout: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <header>
         <Header currentRoute={currentRoute} />
       </header>
@@ -84,7 +84,7 @@ const MainLayout: React.FC = () => {
       <footer>
         <Footer currentRoute={currentRoute} />
       </footer>
-    </>
+    </div>
   );
 };
 
