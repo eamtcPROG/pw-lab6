@@ -5,7 +5,7 @@ import { CommentDto } from "dto/comment.dto";
 
 import useForm from "hooks/useForm";
 
-import React from "react";
+import React, { useState } from "react";
 import RequiredValidator from "validators/required.validator";
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
   onSubmit: (obj: CommentDto) => void;
 };
 const FormComment: React.FC<Props> = ({ id, onSubmit }) => {
+  
   const [obj, isDisabled, setObjField] = useForm(
     new CommentDto(id),
     RequiredValidator.getValidators(["content"])
@@ -22,7 +23,7 @@ const FormComment: React.FC<Props> = ({ id, onSubmit }) => {
     e.preventDefault();
     e.stopPropagation();
     onSubmit(obj);
-    setObjField("content", "");
+    
   };
 
   return (
