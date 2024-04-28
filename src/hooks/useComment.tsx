@@ -18,6 +18,7 @@ export const useComment = (): UseComment => {
     const comments = CommentDto.filterByIdPost(newArr, comment.idpost);
     setComments(comments);
   };
+  
   const getCommentsByIdPost = (id: string) => {
     let comments = LocalStorageTools.getObject("comments");
     if (!comments) comments = [];
@@ -25,5 +26,6 @@ export const useComment = (): UseComment => {
     setComments(comments);
   };
 
+  
   return { comments, addComment, getCommentsByIdPost };
 };
