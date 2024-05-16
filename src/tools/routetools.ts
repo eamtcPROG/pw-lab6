@@ -1,10 +1,11 @@
-
+import RequestFilterDTO from "dto/app/requestfilter.dto";
+import RequestListDTO from "dto/app/requestlist.dto";
+import RequestPopulateDTO from "dto/app/requestpopulate.dto";
+import RequestSortCriteriaDTO from "dto/app/requestsortcriteria.dto";
 import queryString from "query-string";
 class RouteTools {
-  
   // -----------------------------------------
   static processSpecial(paths: any): any {
-    
     if (!paths || !paths.length) {
       // home Page
       return { mobj: "homepage", permissionhash: "/" };
@@ -12,20 +13,16 @@ class RouteTools {
 
     const m = paths[0];
 
-
-    // if (m == "resetpassword") {
-    //   return {
-    //     mobj: "resetpassword",
-    //     permissionhash: "post-user-reset-password",
-    //   };
-    // }
-
-    
+    if (m == "login") {
+      return {
+        mobj: "login",
+        permissionhash: "post-login",
+      };
+    }
   }
 
   //---------------------------------------
 
-  
   static async processRoute(
     paths: any,
     parsed: any,
@@ -44,12 +41,8 @@ class RouteTools {
         mo
       );
 
-    
-
     return RouteTools.processRouteVars("notfound", paths, parsed, fullUrl, "/");
   }
-
-  
 
   static processRouteVars(
     mainObj: any,
@@ -59,9 +52,6 @@ class RouteTools {
     permissionhash: any,
     processedData?: any
   ): any {
-    
-  
-    
     return {
       _mainobject: mainObj,
       _paths: paths,
@@ -76,99 +66,60 @@ class RouteTools {
   // -----------------------------------------
 
   // -----------------------------------------
-  // static prepareListRequest(currentRoute: any, cookies: any): RequestListDTO {
-   
-  //   const cOnPage = 1;
-    
-  //   const obj = new RequestListDTO();
-  //   const _getVars =
-  //     currentRoute && currentRoute._getVars ? currentRoute._getVars : {};
+  static prepareListRequest(currentRoute: any, cookies: any): RequestListDTO {
+    const cOnPage = 1;
 
-  //   obj.page = _getVars.page ? Number(_getVars.page) : 1;
-  //   obj.onpage = _getVars.onpage ? Number(_getVars.onpage) : cOnPage;
+    const obj = new RequestListDTO();
+    const _getVars =
+      currentRoute && currentRoute._getVars ? currentRoute._getVars : {};
 
-  //   obj.filters = [];
-  //   if (_getVars.filters != null && _getVars.filters != undefined) {
-  //     const filters = _getVars.filters.split("|");
+    obj.page = _getVars.page ? Number(_getVars.page) : 1;
+    obj.onpage = _getVars.onpage ? Number(_getVars.onpage) : cOnPage;
 
-  //     for (let i in filters) {
-  //       const t = filters[i].split(",");
+    obj.filters = [];
+    if (_getVars.filters != null && _getVars.filters != undefined) {
+      const filters = _getVars.filters.split("|");
 
-  //       const _o = new RequestFilterDTO();
-  //       _o.field = t[0].trim();
-  //       t.shift();
-  //       _o.values = t;
+      for (let i in filters) {
+        const t = filters[i].split(",");
 
-  //       if (!_o.field) continue;
-  //       if (_o.values == undefined || !_o.values.length) continue;
+        const _o = new RequestFilterDTO();
+        _o.field = t[0].trim();
+        t.shift();
+        _o.values = t;
 
-  //       obj.filters.push(_o);
-  //     }
-  //   }
+        if (!_o.field) continue;
+        if (_o.values == undefined || !_o.values.length) continue;
 
-  //   obj.criteria = [];
-  //   if (_getVars.criteria != null && _getVars.criteria != undefined) {
-  //     const criteria = _getVars.criteria.split("|");
+        obj.filters.push(_o);
+      }
+    }
 
-  //     for (let i in criteria) {
-  //       const t = criteria[i].split(",");
+    if (_getVars.populates != null && _getVars.populates != undefined) {
+      const _o = new RequestPopulateDTO();
+      _o.populates = _getVars.populates.split(",");
+      obj.populate = _o;
+    }
 
-  //       const _o = new RequestCriteriaDTO();
-  //       _o.id = t[0].trim();
-  //       t.shift();
-  //       _o.values = t;
+    obj.sortcriteria = [];
+    if (_getVars.order != null && _getVars.order != undefined) {
+      const order = _getVars.order.split("|");
 
-  //       if (!_o.id) continue;
-  //       if (_o.values == undefined || !_o.values.length) continue;
+      for (let i in order) {
+        const t = order[i].split(",");
 
-  //       obj.criteria.push(_o);
-  //     }
-  //   }
+        const _o = new RequestSortCriteriaDTO();
+        _o.field = t[0].trim();
+        _o.asc = t.length > 1 && t[1] == "asc" ? true : false;
 
-  //   obj.range = [];
-  //   if (_getVars.range != null && _getVars.range != undefined) {
-  //     const range = _getVars.range.split("|");
+        if (!_o.field) continue;
 
-  //     for (let i in range) {
-  //       const t = range[i].split(",");
+        obj.sortcriteria.push(_o);
+      }
+    }
 
-  //       const _o = new RequestCriteriaDTO();
-  //       _o.id = t[0].trim();
-  //       t.shift();
-  //       _o.values = t;
-
-  //       if (!_o.id) continue;
-  //       if (_o.values == undefined || !_o.values.length) continue;
-
-  //       obj.range.push(_o);
-  //     }
-  //   }
-
-  //   if (_getVars.populates != null && _getVars.populates != undefined) {
-  //     const _o = new RequestPopulateDTO();
-  //     _o.populates = _getVars.populates.split(",");
-  //     obj.populate = _o;
-  //   }
-
-  //   obj.sortcriteria = [];
-  //   if (_getVars.order != null && _getVars.order != undefined) {
-  //     const order = _getVars.order.split("|");
-
-  //     for (let i in order) {
-  //       const t = order[i].split(",");
-
-  //       const _o = new RequestSortCriteriaDTO();
-  //       _o.field = t[0].trim();
-  //       _o.asc = t.length > 1 && t[1] == "asc" ? true : false;
-
-  //       if (!_o.field) continue;
-
-  //       obj.sortcriteria.push(_o);
-  //     }
-  //   }
-
-  //   return obj;
-  // }
+    return obj;
+  }
 
   // // -----------------------------------------
   // static prepareListLocation(obj: RequestListDTO): string {
@@ -274,7 +225,6 @@ class RouteTools {
 
   // -----------------------------------------
   static async parseLocation(location: any): Promise<any> {
-  
     const parsed = queryString.parse(location.search);
 
     const fullUrl = location.pathname + location.search;

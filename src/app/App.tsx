@@ -9,6 +9,7 @@ import { Types } from "tools/types";
 
 import { Provider as PostProvider } from "contexts/post.context";
 import { LocalStorageTools } from "tools/localstorage.tools";
+import { AuthProvider } from "providers/AuthProvider";
 const App: React.FC = () => {
 
   const returnDefaultMode = () => {
@@ -36,9 +37,11 @@ const App: React.FC = () => {
     <ResourceProvider toggleTheme={toggleTheme} mode={mode}>
       <ThemeProvider theme={_theme}>
         <CssBaseline>
+          <AuthProvider>
           <PostProvider>
             <RoutesProvider />
           </PostProvider>
+          </AuthProvider>
         </CssBaseline>
       </ThemeProvider>
     </ResourceProvider>
