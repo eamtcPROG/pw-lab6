@@ -4,8 +4,10 @@ import { MyTextField } from "components/elements/form/MyTextField";
 import { CommentDto } from "dto/comment.dto";
 
 import useForm from "hooks/useForm";
+import { AuthContext } from "providers/AuthProvider";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { CommonTools } from "tools/commontools";
 import RequiredValidator from "validators/required.validator";
 
 type Props = {
@@ -13,9 +15,10 @@ type Props = {
   onSubmit: (obj: CommentDto) => void;
 };
 const FormComment: React.FC<Props> = ({ id, onSubmit }) => {
+  const { user } = useContext(AuthContext);
   
   const [obj, isDisabled, setObjField] = useForm(
-    new CommentDto(id),
+    new CommentDto(id, CommonTools.processObjectField(user, ["id"])),
     RequiredValidator.getValidators(["content"])
   );
 
@@ -23,9 +26,8 @@ const FormComment: React.FC<Props> = ({ id, onSubmit }) => {
     e.preventDefault();
     e.stopPropagation();
     onSubmit(obj);
-    
   };
-
+  if (!user) return null;
   return (
     <Box>
       <form onSubmit={handleSubmit}>

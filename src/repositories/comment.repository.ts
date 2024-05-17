@@ -5,7 +5,7 @@ export default class CommentRepository extends GeneralRepository {
   private mainUrl: string = "comment";
 
   add = async (cb: any, params: any, data: any) => {
-    const url = `${this.mainUrl}/`;
+    const url = `${this.mainUrl}`;
     return await this.postAxios(url, cb, data, params);
   };
 
@@ -14,18 +14,23 @@ export default class CommentRepository extends GeneralRepository {
     return await this._get(url, cb, cbparameters);
   };
 
+  getByPostId = async (id: string, cb?: any, cbparameters?: any): Promise<any> => {
+    const url = `${this.mainUrl}/by-post/${id}`;
+    return await this._get(url, cb, cbparameters);
+  };
+
   getList = async (
     cb?: any,
     cbparameters?: any,
     data?: RequestListDTO
   ): Promise<any> => {
-    const url = `${this.mainUrl}/`;
+    const url = `${this.mainUrl}`;
     return await this._getList(url, cb, cbparameters, data);
   };
 
-  update = async (id: string, cb: any, params: any) => {
+  update = async (id: string, cb: any, params: any,data:any) => {
     const url = `${this.mainUrl}/${id}`;
-    return await this.putAxios(url, cb, params);
+    return await this.putAxios(url, cb,data, params);
   };
 
   delete = async (id: string, cb: any, params: any) => {

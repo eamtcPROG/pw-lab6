@@ -83,8 +83,13 @@ export const AuthProvider: React.FC<IProvider> = ({ children }) => {
 
   useEffect(() => {
     getToken();
-    GeneralAxiosRepository.setToken(returnToken);
+    
   }, [getToken]);
+
+  useEffect(() => {
+    
+    GeneralAxiosRepository.setToken(returnToken);
+  }, [token]);
 
   useEffect(() => {
     checkLoading();
@@ -99,6 +104,10 @@ export const AuthProvider: React.FC<IProvider> = ({ children }) => {
   }, [user]);
 
   const login = (data: LoginDto) => {
+    if(!token) {
+        
+        return;
+    }
     service.login(handleLogin, {}, data);
   };
   const handleLogin = (result: ResultObjectDTO) => {

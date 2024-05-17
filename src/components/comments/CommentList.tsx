@@ -9,9 +9,10 @@ import { FormComment } from "./FormComment";
 import { CommentDto } from "dto/comment.dto";
 
 type Props = {
-  idPost: string;
+  idPost?: string;
 };
 const CommentList: React.FC<Props> = ({ idPost }) => {
+  
   const { comments, getCommentsByIdPost, addComment, deleteComment } =
     useComment();
   const [loading, setLoading] = useState<boolean>(true);
@@ -24,6 +25,7 @@ const CommentList: React.FC<Props> = ({ idPost }) => {
   }, [comments]);
 
   useEffect(() => {
+    if(!idPost) return;
     getCommentsByIdPost(idPost);
   }, [idPost]);
 
@@ -49,7 +51,7 @@ const CommentList: React.FC<Props> = ({ idPost }) => {
       </Box>
     ));
   };
-
+  if(!idPost) return null;
   return loading ? (
     <CircularLoading />
   ) : (

@@ -10,13 +10,13 @@ import { Types } from "tools/types";
 import { Provider as PostProvider } from "contexts/post.context";
 import { LocalStorageTools } from "tools/localstorage.tools";
 import { AuthProvider } from "providers/AuthProvider";
+import { MessageProvider } from "providers/MessageProvider";
 const App: React.FC = () => {
-
   const returnDefaultMode = () => {
     const mode = LocalStorageTools.getValue("mode");
-    if(!mode) return Types.LIGHT_MODE;
+    if (!mode) return Types.LIGHT_MODE;
     return mode;
-  }
+  };
 
   const [mode, setMode] = useState(returnDefaultMode());
   const [_theme, setTheme] = useState({});
@@ -37,11 +37,13 @@ const App: React.FC = () => {
     <ResourceProvider toggleTheme={toggleTheme} mode={mode}>
       <ThemeProvider theme={_theme}>
         <CssBaseline>
-          <AuthProvider>
-          <PostProvider>
-            <RoutesProvider />
-          </PostProvider>
-          </AuthProvider>
+          <MessageProvider>
+            <AuthProvider>
+              <PostProvider>
+                <RoutesProvider />
+              </PostProvider>
+            </AuthProvider>
+          </MessageProvider>
         </CssBaseline>
       </ThemeProvider>
     </ResourceProvider>

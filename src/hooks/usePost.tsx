@@ -5,16 +5,17 @@ import { PostDto } from "dto/post.dto";
 type UsePost = {
   posts: Array<PostDto> | null;
   addPost: (post: PostDto) => void;
-  getPostsLocal: () => void;
+  getPostsLocal: (page?: number,setTotalPages?:(v:number)=>void) => void;
   filterPosts: () => Array<PostDto>;
   setSearchText: (searchText: string) => void;
   searchText: string;
   deletePost: (id: string) => void;
   editPost: (post: PostDto) => void;
+  totalPages:number;
 };
 export const usePost = (): UsePost => {
   const {
-    state: { posts, searchText },
+    state: { posts, searchText,totalPages },
     actions: { addPost, getPostsLocal, setSearchText,deletePost,editPost },
   } = useContext(Context);
 
@@ -32,6 +33,7 @@ export const usePost = (): UsePost => {
     setSearchText,
     searchText,
     deletePost,
-    editPost
+    editPost,
+    totalPages
   };
 };

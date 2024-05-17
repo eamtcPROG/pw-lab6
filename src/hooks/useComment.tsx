@@ -2,6 +2,9 @@ import { useState } from "react";
 
 import { CommentDto } from "dto/comment.dto";
 import { LocalStorageTools } from "tools/localstorage.tools";
+import ResultObjectDTO from "dto/app/resultobject.dto";
+import CommentService from "services/comment.service";
+import { CommonTools } from "tools/commontools";
 
 type UseComment = {
   comments: Array<CommentDto> | null;
@@ -9,40 +12,51 @@ type UseComment = {
   getCommentsByIdPost: (id: string) => void;
   deleteComment: (id: string) => void;
 };
+
+const service = new CommentService();
 export const useComment = (): UseComment => {
   const [comments, setComments] = useState<Array<CommentDto> | null>(null);
 
   const addComment = (comment: CommentDto, cb?: () => void) => {
-    let currentComments = LocalStorageTools.getObject("comments");
-    if (!currentComments) currentComments = [];
-    const newArr = [...currentComments, comment];
-    LocalStorageTools.saveObject("comments", newArr);
-    const comments = CommentDto.filterByIdPost(newArr, comment.idpost);
-    setComments(comments);
-    if (cb) {
-      setTimeout(() => {
-        cb();
-      }, 500);
-    }
+    service.add(handleAdd, { cb }, comment);
   };
 
+  const handleAdd = (result: ResultObjectDTO, params: any) => {
+    if (!result) return;
+    if (result.err) return;
+    if (!result.obj) return;
+    const newComments: Array<CommentDto> = [
+      ...(comments || []),
+      result.obj as CommentDto,
+    ];
+    setComments(newComments);
+    if (params && params.cb) params.cb();
+  };
   const getCommentsByIdPost = (id: string) => {
-    let comments = LocalStorageTools.getObject("comments");
-    if (!comments) comments = [];
-    comments = CommentDto.filterByIdPost(comments, id);
+    service.getByPost(id, handleGet, {});
+  };
+  const handleGet = (result: ResultObjectDTO, params: any) => {
+    if (!result) return;
+    if (result.err) return;
+    if (!result.obj) return;
+    const comments = result.obj as Array<CommentDto>;
     setComments(comments);
   };
 
   const deleteComment = (id: string) => {
-    let currentComments: Array<CommentDto> =
-      LocalStorageTools.getObject("comments");
-    if (!currentComments) currentComments = [];
-    const objectToDelete = currentComments.find((item) => item.id === id);
-    if(!objectToDelete) return;
-    const newArr = currentComments.filter((item) => item.id !== id);
-    LocalStorageTools.saveObject("comments", newArr);
-    const comments = CommentDto.filterByIdPost(newArr, objectToDelete.idpost);
-    setComments(comments);
+    service.delete(id, handleDelete, { id });
+  };
+
+  const handleDelete = (result: ResultObjectDTO, params: any) => {
+    if (!result) return;
+    if (result.err) return;
+    if (!params) return;
+    if (!params.id) return;
+
+    const newComments = (comments || []).filter(
+      (item) => item.id !== params.id
+    );
+    setComments(newComments);
   };
 
   return { comments, addComment, getCommentsByIdPost, deleteComment };
