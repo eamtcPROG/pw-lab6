@@ -18,11 +18,13 @@ type Props = {
   token: string;
   user: UserDto | null;
   login: (data: LoginDto) => void;
+  logout: () => void;
 };
 export const AuthContext = createContext<Props>({
   token: "",
   user: null,
   login: (data: LoginDto) => {},
+  logout: () => {},
 });
 
 const service = new AuthService();
@@ -122,10 +124,16 @@ export const AuthProvider: React.FC<IProvider> = ({ children }) => {
 
     console.log("result", result);
   };
+
+  const logout = () => {
+    generate();
+    setUser(null);
+  }
   const value = {
     token,
     user,
     login,
+    logout,
   };
 
   return loading ? (

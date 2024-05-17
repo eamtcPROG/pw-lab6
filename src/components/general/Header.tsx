@@ -1,6 +1,6 @@
 import React , {useState}from "react";
 import PageComponentProps from "interfaces/pagecomponentprops.interface";
-import { AppBar, Box, Toolbar, InputBase, Container } from "@mui/material";
+import { AppBar, Box, Toolbar, InputBase, Container, Stack } from "@mui/material";
 
 import { Logo } from "./Logo";
 import { SwitchThemeMode } from "components/header/SwitchThemeMode";
@@ -8,6 +8,7 @@ import { styled, alpha } from "@mui/material/styles";
 
 import SearchIcon from "@mui/icons-material/Search";
 import { usePost } from "hooks/usePost";
+import { LogoutButton } from "components/auth/LogoutButton";
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -81,7 +82,10 @@ const Header: React.FC<PageComponentProps> = ({ currentRoute }) => {
           <Box sx={{ flexGrow: 1 }} />
 
           <Box sx={{ flexGrow: 0 }}>
+            <Stack spacing={2} direction="row" alignItems={"center"}>
             <SwitchThemeMode />
+            <LogoutButton />
+            </Stack>
           </Box>
         </Toolbar>
       </Container>
